@@ -1,0 +1,17 @@
+{
+  "name": "react-firebase-app",
+  "displayName": "react-firebase-app",
+  "expo": {
+    "name": "react-firebase-app",
+    "slug": "react-firebase-app",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
