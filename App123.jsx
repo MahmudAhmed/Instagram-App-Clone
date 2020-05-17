@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
 import * as Facebook from "expo-facebook";
-import { f, auth, db, storage } from "./config/config";
+import { f, auth, db, storage } from "./config/config"; 
 import Login from "./app/screens/form_action"
 
 
