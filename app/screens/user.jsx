@@ -6,29 +6,46 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false,
+      loaded: false, user: null
     };
+    this.loadUser();
+  }
 
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({ loggedIn: true });
-      } else {
-        this.setState({ loggedIn: false });
-      }
-    });
+  loadUser = () => {
+    const params = this.props.route.params;
+    if ( params && params.userID ) {
+      // debugger
+      db.collection('users').doc(params.userID).get().then( usr => {
+        if (usr.exists) {
+          this.setState({ user: usr.data(), loaded: true })
+        } else {
+          console.log('User not found!')
+        }
+      })
+    }
+    
   }
 
   render() {
+    const user = this.state.user;
     return (
       <View style={styles.container}>
-        {this.state.loggedIn ? (
+        {this.state.loaded ? (
           <View style={styles.profileContainer}>
             <View style={styles.titleContainer}>
+              <TouchableOpacity 
+                onPress={() => this.props.navigation.goBack()}
+              >
+                <Text style={{ width: 60 }}>Go Back</Text>
+              </TouchableOpacity>
               <Text style={styles.title}>Profile</Text>
+              <TouchableOpacity>
+                <Text style={{ width: 60, textAlign: "center" }}>+</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.profileDetails}>
               <Image
-                source={{ uri: "https://i.pravatar.cc/330" }}
+                source={{ uri: user.avatar }}
                 style={{
                   width: 100,
                   height: 100,
@@ -37,31 +54,17 @@ export default class Profile extends React.Component {
                 }}
               />
               <View style={styles.usernameDetails}>
-                <Text>Name</Text>
-                <Text>@username</Text>
+                <Text>{user.name}</Text>
+                <Text>{user.username}</Text>
               </View>
-            </View>
-            <View style={styles.profileBtns}>
-              <TouchableOpacity style={styles.btn}>
-                <Text>Logout</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.btn}>
-                <Text>Edit Profile</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.btn, styles.uploadBtn]}
-                onPress={() => this.props.navigation.navigate("Upload")}
-              >
-                <Text style={{ color: "white" }}>Upload New +</Text>
-              </TouchableOpacity>
             </View>
             <View style={styles.gallary}>
               <Text style={{ color: "white" }}>Loading photos...</Text>
             </View>
           </View>
         ) : (
-          <View style={styles.loginPrompt}>
-            <Text>Please login to see your profile...</Text>
+          <View style={styles.loadingPrompt}>
+            <Text>Loading...</Text>
           </View>
         )}
       </View>
@@ -76,23 +79,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  uploadBtn: {
-    backgroundColor: "crimson",
-  },
-  btn: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 100,
-    borderColor: "grey",
-    padding: 10,
-    marginTop: 10,
-    marginHorizontal: 40,
-  },
-  profileBtns: {
-    paddingBottom: 20,
-    borderBottomWidth: 1,
-  },
   usernameDetails: {
     marginRight: 10,
     alignItems: "center",
@@ -106,7 +92,7 @@ const styles = StyleSheet.create({
   profileContainer: {
     flex: 1,
   },
-  loginPrompt: {
+  loadingPrompt: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -117,13 +103,15 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     paddingTop: 30,
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
     height: 70,
     borderBottomWidth: 1,
     borderBottomColor: "lightgray",
     backgroundColor: "white",
+    flexDirection: "row",
+    marginHorizontal: 10,
   },
   container: {
     flex: 1,

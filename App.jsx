@@ -34,7 +34,7 @@ export default class App extends React.Component {
         >
           <Stack.Screen name="Home" component={TabScreen} />
           <Stack.Screen name="User" component={User} />
-          <Stack.Screen name="Comment" component={Comment} />
+          <Stack.Screen name="Comments" component={Comment} />
         </Stack.Navigator>
       </NavigationContainer>
     );

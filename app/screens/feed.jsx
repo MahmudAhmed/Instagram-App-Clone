@@ -32,10 +32,12 @@ export default class Feed extends React.Component {
             .then((userDoc) => {
               if (userDoc.exists) {
                 list.push({
+                  photoID: doc.id,
                   url: doc.data().url,
                   caption: doc.data().caption,
                   posted: doc.data().posted.seconds,
                   username: userDoc.data().username,
+                  userID: userDoc.id,
                 });
               } else {
                 console.log("user not found!");
@@ -79,7 +81,11 @@ export default class Feed extends React.Component {
                 <View style={styles.topTextContainer}>
                   <Text>{timeSince(item.posted * 1000)} ago</Text>
                   <TouchableOpacity
-                    onPress={ () => this.props.navigation.navigate("User")}
+                    onPress={() =>
+                      this.props.navigation.navigate("User", {
+                        userID: item.userID,
+                      })
+                    }
                   >
                     <Text>{item.username}</Text>
                   </TouchableOpacity>
@@ -92,7 +98,15 @@ export default class Feed extends React.Component {
                 />
                 <View style={styles.btmTextContainer}>
                   <Text>{item.caption}</Text>
-                  <Text style={styles.comments}>Comments go here...</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate("Comments", {
+                        photoID: item.photoID,
+                      })
+                    }
+                  >
+                    <Text style={styles.comments}>[ View comments ]</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             )}
@@ -117,6 +131,7 @@ const styles = StyleSheet.create({
   comments: {
     marginTop: 10,
     textAlign: "center",
+    color: 'blue',
   },
   topTextContainer: {
     padding: 5,

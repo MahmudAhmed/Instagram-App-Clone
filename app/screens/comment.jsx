@@ -2,36 +2,28 @@ import * as React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { f, auth, db, storage } from "../../config/config";
 
-export default class Upload extends React.Component {
+export default class Comments extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false,
+      loaded: true,
     };
-
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({ loggedIn: true });
-      } else {
-        this.setState({ loggedIn: false });
-      }
-    });
   }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Upload</Text>
+          <Text style={styles.title}>Comments</Text>
         </View>
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          {this.state.loggedIn ? (
-            <Text>Upload</Text>
+          {this.state.loaded ? (
+            <Text>{this.props.route.params.photoID}</Text>
           ) : (
             <View>
-              <Text>Please login to Upload photos...</Text>
+              <Text>Please login to comments on photos...</Text>
             </View>
           )}
         </View>
