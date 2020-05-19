@@ -8,8 +8,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.4.4",
     "@react-navigation/native": "^5.3.2",
+    "@react-navigation/stack": "^5.3.7",
     "expo": "~37.0.3",
     "expo-facebook": "^8.1.0",
     "expo-updates": "~0.1.0",

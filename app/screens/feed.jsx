@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Text, View, StyleSheet, Image, FlatList } from "react-native";
+import { Text, View, StyleSheet, Image, FlatList, TouchableOpacity } from "react-native";
 import { f, auth, db, storage } from "../../config/config"; 
 import { timeSince } from "../utils/time_ago";
+
 export default class Feed extends React.Component {
 
   constructor(props){
@@ -64,7 +65,7 @@ export default class Feed extends React.Component {
         </View>
 
         {this.state.loading ? (
-          <View style={styles.loading} >
+          <View style={styles.loading}>
             <Text>Loading...</Text>
           </View>
         ) : (
@@ -77,7 +78,11 @@ export default class Feed extends React.Component {
               <View>
                 <View style={styles.topTextContainer}>
                   <Text>{timeSince(item.posted * 1000)} ago</Text>
-                  <Text>{item.username}</Text>
+                  <TouchableOpacity
+                    onPress={ () => this.props.navigation.navigate("User")}
+                  >
+                    <Text>{item.username}</Text>
+                  </TouchableOpacity>
                 </View>
                 <Image
                   style={styles.img}
