@@ -26,7 +26,7 @@ export default class Feed extends React.Component {
         const list = this.state.list;
         querySnapshot.forEach( doc => {
           db.collection("users")
-            .doc(doc.data().author)
+            .doc(doc.data().authorID)
             .get()
             .then((userDoc) => {
               if (userDoc.exists) {

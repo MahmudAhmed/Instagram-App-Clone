@@ -23,6 +23,11 @@ export default class App extends React.Component {
   registerUser = (email, password) => {
     auth 
       .createUserWithEmailAndPassword(email, password)
+      .then( cred => {
+        db.collection('users').doc(cred.user.uid).set({
+          email: cred.user.email
+        }, (err => console.log('error pushing to db', err)))
+      })
       .then(this.setState({ formView: false }))
       .catch((err) => console.log("error registering user", err));
   }
