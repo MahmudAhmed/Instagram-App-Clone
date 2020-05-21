@@ -43,8 +43,8 @@ export default class Feed extends React.Component {
                 console.log("user not found!");
               }
             })
-            .then(() => this.setState({ list }));
-        });
+            .then(() => this.setState({ list }))
+          });
         
         this.setState({
           refreshing: false,
