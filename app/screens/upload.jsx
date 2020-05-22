@@ -69,7 +69,7 @@ export default class Upload extends React.Component {
     } else {
       alert("Please add a caption!")
     }
-  }
+  } 
 
   uploadImage = async () => {
     const userID = auth.currentUser.uid;
