@@ -63,11 +63,13 @@ export default class Upload extends React.Component {
   }
 
   handleUploadClk = () => {
-    if (this.state.caption !== '') {
-      this.setState({uploading: true})
-      this.uploadImage();
-    } else {
-      alert("Please add a caption!")
+    if ( !this.state.uploading ) { 
+      if (this.state.caption !== '') {
+        this.setState({uploading: true})
+        this.uploadImage();
+      } else {
+        alert("Please add a caption!")
+      }
     }
   } 
 
@@ -95,7 +97,8 @@ export default class Upload extends React.Component {
   addToDatabase = (url) => {
     const caption = this.state.caption;
     const authorID = auth.currentUser.uid;
-    const posted = Math.floor(Date.now() / 1000); 
+    const posted = new Date(Date.now());
+
     const obj = {
       url: url,
       authorID,
