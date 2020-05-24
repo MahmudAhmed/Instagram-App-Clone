@@ -1,19 +1,22 @@
 import * as React from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { f, auth, db, storage } from "../../config/config"; 
-
+import PhotoList from '../component/photolist'; 
 
 export default class Profile extends React.Component {
 
   constructor(props){
     super(props);
     this.state = {
-      loggedIn: false
+      loggedIn: false,
+      user: null
     }
 
     auth.onAuthStateChanged(user => {
       if (user) {
-        this.setState({ loggedIn: true })
+        db.collection('users').doc(user.uid).get().then( (usr) => {
+          this.setState({ loggedIn: true, userID: user.uid, user: usr.data()})
+        })
       } else {
         this.setState({ loggedIn: false });
       }
@@ -23,6 +26,7 @@ export default class Profile extends React.Component {
 
 
   render() {
+    const user = this.state.user;
     return (
       <View style={styles.container}>
         
@@ -33,17 +37,18 @@ export default class Profile extends React.Component {
             </View>
             <View style={styles.profileDetails}>
               <Image 
-                source={ {uri: 'https://i.pravatar.cc/330'} }
+                source={ {uri: user.avatar} }
                 style={{width: 100, height: 100, borderRadius: 50, marginLeft: 10 }}
               />
               <View style={styles.usernameDetails}>
-                <Text>Name</Text>
-                <Text>@username</Text>
+                <Text>{user.name}</Text>
+                <Text>{user.username}</Text>
               </View>
             </View>
             <View style={styles.profileBtns}>
               <TouchableOpacity
                 style={styles.btn}
+                onPress={ () => auth.signOut()}
               >
                 <Text>Logout</Text>
               </TouchableOpacity>
@@ -59,9 +64,10 @@ export default class Profile extends React.Component {
                 <Text style={{color: 'white'}}>Upload New +</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.gallary}>
+            {/* <View style={styles.gallary}>
               <Text style={{color: 'white'}}>Loading photos...</Text>
-            </View>
+            </View> */}
+            <PhotoList navigation={this.props.navigation} userID={this.state.userID}/>
           </View>
           ) : (
           <View style={styles.loginPrompt}>

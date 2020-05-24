@@ -42,6 +42,7 @@ export default class Upload extends React.Component {
     const results = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
+      aspect: [4,3],
       quality: 1,
     });
     
@@ -104,20 +105,23 @@ export default class Upload extends React.Component {
       authorID,
       caption : caption,
       posted 
-    }
-    db.collection('photos').add(obj).then( () => {
-      this.setState({
-        uploading: false,
-        imgSelected: false,
-        uri: "",
-        caption: "",
-      });
+    };
+
+    db.collection('photos').add(obj).then( (doc) => {
+      db.collection('users').doc(authorID).collection('photos').doc(doc.id).set(obj)
+        .then( ()=> {
+          alert("Image Uploaded Successfully");
+          this.setState({
+            uploading: false,
+            imgSelected: false,
+            uri: "",
+            caption: "",
+          }); 
+        })
     })
     .catch( err => {
       console.log(err);
     })
-
- 
   }
 
   render() {

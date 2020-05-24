@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { f, auth, db, storage } from "../../config/config";
+import PhotoList from '../component/photolist';
 
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loaded: false, user: null
+      loaded: false, user: null, 
     };
     this.loadUser();
   }
@@ -14,10 +15,9 @@ export default class Profile extends React.Component {
   loadUser = () => {
     const params = this.props.route.params;
     if ( params && params.userID ) {
-      // debugger
       db.collection('users').doc(params.userID).get().then( usr => {
         if (usr.exists) {
-          this.setState({ user: usr.data(), loaded: true })
+          this.setState({ user: usr.data(), loaded: true, userID: params.userID })
         } else {
           console.log('User not found!')
         }
@@ -58,9 +58,8 @@ export default class Profile extends React.Component {
                 <Text>{user.username}</Text>
               </View>
             </View>
-            <View style={styles.gallary}>
-              <Text style={{ color: "white" }}>Loading photos...</Text>
-            </View>
+
+            <PhotoList navigation={this.props.navigation} userID={this.state.userID}/>
           </View>
         ) : (
           <View style={styles.loadingPrompt}>
