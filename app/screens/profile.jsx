@@ -11,19 +11,19 @@ export default class Profile extends React.Component {
       loggedIn: false,
       user: null
     }
+  }
 
+  componentDidMount(){
     auth.onAuthStateChanged(user => {
       if (user) {
-        db.collection('users').doc(user.uid).get().then( (usr) => {
-          this.setState({ loggedIn: true, userID: user.uid, user: usr.data()})
+        db.collection('users').doc(user.uid).get().then((usr) => {
+          this.setState({ loggedIn: true, userID: user.uid, user: usr.data() })
         })
       } else {
         this.setState({ loggedIn: false });
       }
     }); 
-
   }
-
 
   render() {
     const user = this.state.user;
@@ -64,9 +64,7 @@ export default class Profile extends React.Component {
                 <Text style={{color: 'white'}}>Upload New +</Text>
               </TouchableOpacity>
             </View>
-            {/* <View style={styles.gallary}>
-              <Text style={{color: 'white'}}>Loading photos...</Text>
-            </View> */}
+
             <PhotoList navigation={this.props.navigation} userID={this.state.userID}/>
           </View>
           ) : (

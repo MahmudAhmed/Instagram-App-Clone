@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Text, View, StyleSheet, Image, FlatList, TouchableOpacity } from "react-native";
-import { f, auth, db, storage } from "../../config/config"; 
-import { timeSince } from "../utils/time_ago";
+import { Text, View, StyleSheet } from "react-native";
+
 import PhotoList from '../component/photolist';
 
 export default class Feed extends React.Component {
@@ -13,7 +12,6 @@ export default class Feed extends React.Component {
           <Text style={styles.title}>Feed</Text>
         </View>
         <PhotoList navigation={this.props.navigation}/>
-        
       </View>
     );
   }

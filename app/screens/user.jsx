@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { f, auth, db, storage } from "../../config/config";
+import { db } from "../../config/config";
 import PhotoList from '../component/photolist';
 
 export default class Profile extends React.Component {
@@ -9,6 +9,9 @@ export default class Profile extends React.Component {
     this.state = {
       loaded: false, user: null, 
     };
+  }
+
+  componentDidMount(){
     this.loadUser();
   }
 
@@ -23,7 +26,6 @@ export default class Profile extends React.Component {
         }
       })
     }
-    
   }
 
   render() {
@@ -40,7 +42,7 @@ export default class Profile extends React.Component {
               </TouchableOpacity>
               <Text style={styles.title}>Profile</Text>
               <TouchableOpacity>
-                <Text style={{ width: 60, textAlign: "center" }}>+</Text>
+                <Text style={{ width: 60 }}></Text>
               </TouchableOpacity>
             </View>
             <View style={styles.profileDetails}>
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "lightgray",
     backgroundColor: "white",
     flexDirection: "row",
-    marginHorizontal: 10,
+    paddingHorizontal: 10,
   },
   container: {
     flex: 1,

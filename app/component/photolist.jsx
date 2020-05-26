@@ -8,7 +8,10 @@ export default class PhotoList extends React.Component {
   constructor(props) {
     super(props);
     this.state = { list: [], refreshing: false, loading: true };
-    this.fetchPhotos(this.props.userID)
+  }
+
+  componentDidMount() {
+    this.fetchPhotos(this.props.userID);
   }
 
   fetchPhotos = (userID=null) => {
