@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity, TextInput } from "react-native";
 import { f, auth, db, storage } from "../../config/config"; 
 import PhotoList from '../component/photolist'; 
 
@@ -9,21 +9,43 @@ export default class Profile extends React.Component {
     super(props);
     this.state = {
       loggedIn: false,
-      user: null
+      user: null,
+      editView: false,
     }
   }
 
   componentDidMount(){
     auth.onAuthStateChanged(user => {
       if (user) {
-        db.collection('users').doc(user.uid).get().then((usr) => {
-          this.setState({ loggedIn: true, userID: user.uid, user: usr.data() })
-        })
+        this.fetchUsr(user.uid)
       } else {
         this.setState({ loggedIn: false });
       }
     }); 
   }
+
+  fetchUsr = (userID) => {
+    db.collection('users').doc(userID).get().then((usr) => {
+      this.setState({
+        loggedIn: true,
+        userID: userID,
+        name: usr.data().name,
+        username: usr.data().username,
+        user: usr.data()
+      })
+    })
+  }
+
+  updateUserInfo = () => {
+    db.collection('users').doc(this.state.userID).update({
+      username: this.state.username,
+      name: this.state.name
+    }).then( () => {
+      alert("Profile Updated")
+      this.setState({editView: false}, () => this.fetchUsr(this.state.userID));
+    }).catch( err => console.log(err) )
+  }
+
 
   render() {
     const user = this.state.user;
@@ -45,25 +67,64 @@ export default class Profile extends React.Component {
                 <Text>{user.username}</Text>
               </View>
             </View>
-            <View style={styles.profileBtns}>
-              <TouchableOpacity
-                style={styles.btn}
-                onPress={ () => auth.signOut()}
-              >
-                <Text>Logout</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.btn}
-              >
-                <Text>Edit Profile</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.btn, styles.uploadBtn]}
-                onPress={ () => this.props.navigation.navigate("Upload")}
-              >
-                <Text style={{color: 'white'}}>Upload New +</Text>
-              </TouchableOpacity>
-            </View>
+            { this.state.editView ? (
+              <View style={styles.editForm}>
+                <View>
+                  <View>
+                    <Text>Name</Text>
+                    <TextInput
+                      placeholder={this.state.name}
+                      onChangeText={text => this.setState({ name: text })}
+                      style={styles.textInput}
+                      value={this.state.name}
+                    />
+                  </View>
+                  <View>
+                    <Text>Username</Text>
+                    <TextInput
+                      placeholder={this.state.username}
+                      onChangeText={text => this.setState({ username: text })}
+                      style={styles.textInput}
+                      value={this.state.username}
+                    />
+                  </View>
+                </View>
+                <View style={styles.editBtnCNT}>
+                  <TouchableOpacity
+                    onPress={ () => this.setState({ editView: false})}
+                  >
+                    <Text style={styles.editBtns} >Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => this.updateUserInfo()}
+                  >
+                    <Text style={styles.editBtns} >Update</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : (
+              <View style={styles.profileBtns}>
+                <TouchableOpacity
+                  style={styles.btn}
+                  onPress={() => auth.signOut()}
+                >
+                  <Text>Logout</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.btn}
+                  onPress={() => this.setState({ editView: true})}
+                >
+                  <Text>Edit Profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.btn, styles.uploadBtn]}
+                  onPress={() => this.props.navigation.navigate("Upload")}
+                >
+                  <Text style={{ color: 'white' }}>Upload New +</Text>
+                </TouchableOpacity>
+              </View>
+            ) }
+            
 
             <PhotoList navigation={this.props.navigation} userID={this.state.userID}/>
           </View>
@@ -79,6 +140,28 @@ export default class Profile extends React.Component {
 
 
 const styles = StyleSheet.create({
+  textInput: {
+    width: 250,
+    marginVertical: 10,
+    padding: 5,
+    borderColor: "grey",
+    borderWidth: 1,
+  },
+  editBtns: {
+    padding: 5,
+    marginRight: 5,
+    backgroundColor: 'navy',
+    color: 'white',
+
+  },
+  editBtnCNT: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  editForm: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   gallary: {
     flex: 1,
     backgroundColor: "navy",
