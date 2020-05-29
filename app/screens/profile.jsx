@@ -160,7 +160,8 @@ const styles = StyleSheet.create({
   },
   editForm: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingVertical: 10
   },
   gallary: {
     flex: 1,
@@ -220,6 +221,6 @@ const styles = StyleSheet.create({
     
   },
   container: {
-    flex: 1,
+    flex: 1, 
   },
 });
