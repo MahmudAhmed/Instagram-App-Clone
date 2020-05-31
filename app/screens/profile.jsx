@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity, TextInput } from "react-native";
 import { f, auth, db, storage } from "../../config/config"; 
-import PhotoList from '../component/photolist'; 
+import PhotoList from '../component/photolist';
+import Auth from '../component/auth'; 
 
 export default class Profile extends React.Component {
 
@@ -129,9 +130,7 @@ export default class Profile extends React.Component {
             <PhotoList navigation={this.props.navigation} userID={this.state.userID}/>
           </View>
           ) : (
-          <View style={styles.loginPrompt}>
-            <Text>Please login to see your profile...</Text>
-          </View>
+          <Auth message={'Please login to view your profile'} />
         )}
       </View>
     );

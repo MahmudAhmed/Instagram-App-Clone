@@ -73,47 +73,56 @@ export default class PhotoList extends React.Component {
             <Text>Loading...</Text>
           </View>
         ) : (
-            <FlatList
-              data={this.state.list}
-              style={styles.flatList}
-              refreshing={this.state.refreshing}
-              onRefresh={this.handleRefresh}
-              renderItem={({ item, index }) => (
-                <View>
-                  <View style={styles.topTextContainer}>
-                    <Text>{timeSince(item.posted * 1000)} ago</Text>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.props.navigation.navigate("User", {
-                          userID: item.userID,
-                        })
-                      }
-                    >
-                      <Text>{item.username}</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <Image
-                    style={styles.img}
-                    source={{
-                      uri: item.url,
-                    }}
-                  />
-                  <View style={styles.btmTextContainer}>
-                    <Text>{item.caption}</Text>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.props.navigation.navigate("Comments", {
-                          photoID: item.photoID,
-                        })
-                      }
-                    >
-                      <Text style={styles.comments}>[ View comments ]</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
+          <View style={{flex: 1}}>
+            { this.state.list.length ? (
+                <FlatList
+                  data={this.state.list}
+                  style={styles.flatList}
+                  refreshing={this.state.refreshing}
+                  onRefresh={this.handleRefresh}
+                  renderItem={({ item, index }) => (
+                    <View>
+                      <View style={styles.topTextContainer}>
+                        <Text>{timeSince(item.posted * 1000)} ago</Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.props.navigation.navigate("User", {
+                              userID: item.userID,
+                            })
+                          }
+                        >
+                          <Text>{item.username}</Text>
+                        </TouchableOpacity>
+                      </View>
+                      <Image
+                        style={styles.img}
+                        source={{
+                          uri: item.url,
+                        }}
+                      />
+                      <View style={styles.btmTextContainer}>
+                        <Text>{item.caption}</Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.props.navigation.navigate("Comments", {
+                              photoID: item.photoID,
+                            })
+                          }
+                        >
+                          <Text style={styles.comments}>[ View comments ]</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+            ) : (
+              <View style={styles.center}>
+                <Text>User has no photos...</Text>
+              </View>
+            )}
+          </View>
+            
           )}
       </View>
     );
@@ -172,4 +181,9 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // alignItems: "center",
   },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });

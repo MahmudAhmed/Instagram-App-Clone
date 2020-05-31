@@ -15,16 +15,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.loginDemo();
-  }
 
-  loginDemo = () => {
-    auth
-      .signInWithEmailAndPassword('user1@gmail.com', 'fireball42')
-      .catch(err => console.log('error logging in', err))
-  }
   render() {
     return (
       <NavigationContainer>

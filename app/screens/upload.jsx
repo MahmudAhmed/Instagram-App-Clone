@@ -3,6 +3,7 @@ import { TextInput, ActivityIndicator, Text, View, StyleSheet, TouchableOpacity,
 import { f, auth, db, storage } from "../../config/config";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import Auth from '../component/auth'; 
 
 export default class Upload extends React.Component {
 
@@ -177,9 +178,7 @@ export default class Upload extends React.Component {
             )}
           </View>
         ) : (
-          <View>
-            <Text>Please login to Upload photos...</Text>
-          </View>
+          <Auth message={'Please login to upload a photo'} />
         )}
       </View>
     );

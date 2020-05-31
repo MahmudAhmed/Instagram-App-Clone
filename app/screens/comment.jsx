@@ -3,6 +3,8 @@ import { FlatList, Text, View, StyleSheet, TouchableOpacity, TouchableWithoutFee
 import { f, auth, db, storage } from "../../config/config";
 import { timeSince } from "../utils/time_ago";
 
+import Auth from '../component/auth'; 
+
 
 export default class Comments extends React.Component {
   
@@ -162,9 +164,7 @@ export default class Comments extends React.Component {
             </KeyboardAvoidingView>
             
           ) : (
-            <View>
-              <Text>Please login to comments on photos...</Text>
-            </View>
+            <Auth message={'Please login to post a comment'} moveScreen={true} navigation={this.props.navigation}/>
           )}
         </View>
       </View>
